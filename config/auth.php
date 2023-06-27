@@ -46,6 +46,19 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        // custom guard for role management
+        'normalUser' => [
+            'driver' => 'session',
+            'provider' => 'normalUser',
+        ],
+        'companyUser' => [
+            'driver' => 'session',
+            'provider' => 'companyUser',
+        ],
+        'adminUser' => [
+            'driver' => 'session',
+            'provider' => 'adminUser',
+        ],
     ],
 
     /*
@@ -69,6 +82,19 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        // custom provider for role management
+        'normalUser' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\NormalUser::class,
+        ],
+        'companyUser' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\CompanyUser::class,
+        ],
+        'adminUser' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AdminUser::class,
         ],
 
         // 'users' => [
