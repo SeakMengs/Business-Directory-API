@@ -69,7 +69,10 @@ class CompanyUserApiController extends Controller
             ], 404);
         }
 
-        return response()->json($data);
+        // return response()->json($data);
+        return response()->json([
+            'userData' => $data,
+        ],200);
     }
 
     public function editProfile($username, $userId)
@@ -78,9 +81,12 @@ class CompanyUserApiController extends Controller
 
         $data = CompanyUser::where('company_user_id', $userId)->first();
 
-        return view('edit-company-account', [
+        // return view('edit-company-account', [
+        //     'user' => $data,
+        // ]);
+        return response()->json([
             'user' => $data,
-        ]);
+        ], 200);
     }
 
     public function saveEditProfile(Request $request, $username, $userId)
@@ -153,12 +159,22 @@ class CompanyUserApiController extends Controller
         $saveChange = CompanyUser::where('company_user_id', $userId)->update($storeInput);
 
         if (!$saveChange) {
-            return redirect()->back()->withErrors('error', 'Failed to save changes');
+            // return redirect()->back()->withErrors('error', 'Failed to save changes');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to save changes',
+            ],400);
         } else {
-            return redirect()->route('user.company.name.id.profile.edit', [
+            // return redirect()->route('user.company.name.id.profile.edit', [
+            //     'name' => $storeInput['name'],
+            //     'id' => $userId,
+            // ])->with('success', 'Changes saved');
+            return response()->json([
                 'name' => $storeInput['name'],
                 'id' => $userId,
-            ])->with('success', 'Changes saved');
+                'status'=>'success',
+                'message'=> 'Changes saved',
+            ],200);
         }
     }
 
@@ -179,10 +195,14 @@ class CompanyUserApiController extends Controller
         // json view
         // return response()->json($company);
 
-        return view('edit-company', [
+        // return view('edit-company', [
+        //     'company' => $company,
+        //     'categories' => $categories,
+        // ]);
+        return response()->json([
             'company' => $company,
             'categories' => $categories,
-        ]);
+        ], 200);
     }
 
     public function addCompany($username, $userId)
@@ -191,9 +211,12 @@ class CompanyUserApiController extends Controller
 
         $categories = Category::get();
 
-        return view('add-company', [
-            'categories' => $categories,
-        ]);
+        // return view('add-company', [
+        //     'categories' => $categories,
+        // ]);
+        return response()->json([
+            'categories' => $categories
+        ],200);
     }
     public function addCompanySave(Request $request, $username, $userId)
     {
@@ -334,9 +357,17 @@ class CompanyUserApiController extends Controller
                 }
             }
 
-            return redirect()->back()->with('success', 'Company added successfully');
+            // return redirect()->back()->with('success', 'Company added successfully');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Company added successfully',
+            ],200);
         } else {
-            return redirect()->back()->with('error', 'Failed to add company');
+            // return redirect()->back()->with('error', 'Failed to add company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to add company',
+            ],400);
         }
     }
 
@@ -356,9 +387,17 @@ class CompanyUserApiController extends Controller
             $removeRates = Rate::where('company_id', $company_id)->delete();
             $removeSavedCompanies = SavedCompany::where('company_id', $company_id)->delete();
 
-            return redirect()->back()->with('success', 'Company has been removed');
+            // return redirect()->back()->with('success', 'Company has been removed');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Company has been removed',
+            ],200);
         } else {
-            return redirect()->back()->with('error', 'Remove company failed');
+            // return redirect()->back()->with('error', 'Remove company failed');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Remove company failed',
+            ],400);
         }
     }
 
@@ -535,9 +574,17 @@ class CompanyUserApiController extends Controller
                     $deleteGallery = CompanyGallery::where([['gallery_id', $gallery_id], ['company_id', $company_id]])->delete();
                 }
             }
-            return redirect()->back()->with('success', 'Company has been updated successfully');
+            // return redirect()->back()->with('success', 'Company has been updated successfully');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Company has been updated successfully',
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Company failed to update');
+            // return redirect()->back()->with('error', 'Company failed to update');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Company failed to update',
+            ], 400);
         }
 
     }

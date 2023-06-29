@@ -43,9 +43,12 @@ class NormalUserApiController extends Controller
             ], 404);
         }
 
-        return view('normal_user_profile', [
+        // return view('normal_user_profile', [
+        //     'user' => $data,
+        // ]);
+        return response()->json([
             'user' => $data,
-        ]);
+        ],200);
     }
 
     public function editProfile($username, $userId)
@@ -59,9 +62,12 @@ class NormalUserApiController extends Controller
             ], 404);
         }
 
-        return view('edit-normaluser-account', [
+        // return view('edit-normaluser-account', [
+        //     'user' => $data,
+        // ]);
+        return response()->json([
             'user' => $data,
-        ]);
+        ],200);
 
     }
 
@@ -135,12 +141,22 @@ class NormalUserApiController extends Controller
         $saveChange = normalUser::where('normal_user_id', $userId)->update($storeInput);
 
         if (!$saveChange) {
-            return redirect()->back()->withErrors('error', 'Failed to save changes');
+            // return redirect()->back()->withErrors('error', 'Failed to save changes');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to save changes',
+            ], 400);
         } else {
-            return redirect()->route('user.normal.name.id.profile.edit', [
+            // return redirect()->route('user.normal.name.id.profile.edit', [
+            //     'name' => $storeInput['name'],
+            //     'id' => $userId,
+            // ])->with('success', 'Changes saved');
+            return response()->json([
                 'name' => $storeInput['name'],
                 'id' => $userId,
-            ])->with('success', 'Changes saved');
+                'status'=>'success',
+                'message' => 'Changes saved',
+            ], 200);
         }
     }
 
@@ -155,16 +171,28 @@ class NormalUserApiController extends Controller
                 'company_id' => $company_id,
             ])->delete();
 
-            return redirect()->back()->with('success', 'Company has been removed from your saved company list');
+            // return redirect()->back()->with('success', 'Company has been removed from your saved company list');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Company has been removed from your saved company list',
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Remove saved company failed');
+            // return redirect()->back()->with('error', 'Remove saved company failed');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Remove saved company failed',
+            ], 400);
         }
     }
 
     public function saveCompany(Request $request, $categoryName, $companyName)
     {
         if (!$this->userData) {
-            return redirect()->back()->with('error', 'You must login as a normal user to save company');
+            // return redirect()->back()->with('error', 'You must login as a normal user to save company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'You must login as a normal user to save company',
+            ], 400);
         }
 
         $company_id = $request->input('company_id');
@@ -176,7 +204,11 @@ class NormalUserApiController extends Controller
         ])->first();
 
         if ($checkSavedCompanyHistory) {
-            return redirect()->back()->with('error', 'Company has already been saved in your list');
+            // return redirect()->back()->with('error', 'Company has already been saved in your list');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Company has already been saved in your list',
+            ], 400);
         }
 
         $saveCompany = SavedCompany::create([
@@ -185,16 +217,28 @@ class NormalUserApiController extends Controller
         ]);
 
         if ($saveCompany) {
-            return redirect()->back()->with('success', 'Company has been saved in your list');
+            // return redirect()->back()->with('success', 'Company has been saved in your list');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Company has been saved in your list',
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Failed to save company in your list');
+            // return redirect()->back()->with('error', 'Failed to save company in your list');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to save company in your list',
+            ], 400);
         }
     }
 
     public function postFeedback(Request $request, $categoryName, $companyName)
     {
         if (!$this->userData) {
-            return redirect()->back()->with('error', 'You must login as a normal user to post feedback on company');
+            // return redirect()->back()->with('error', 'You must login as a normal user to post feedback on company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'You must login as a normal user to post feedback on company',
+            ], 400);
         }
 
         $validate = Validator::make($request->all(), [
@@ -203,7 +247,11 @@ class NormalUserApiController extends Controller
 
         if ($validate->fails()) {
             if ($validate->errors()->has('feedback')) {
-                return redirect()->back()->with('error', 'Feedback is required');
+                // return redirect()->back()->with('error', 'Feedback is required');
+                return response()->json([
+                    'status'=>'error',
+                    'message' => 'Feedback is required',
+                ], 400);
             }
         }
 
@@ -218,7 +266,11 @@ class NormalUserApiController extends Controller
         ])->first();
 
         if ($checkFeedbackHistory) {
-            return redirect()->back()->with('error', 'You have already posted feedback on this company before');
+            // return redirect()->back()->with('error', 'You have already posted feedback on this company before');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'You have already posted feedback on this company before',
+            ], 400);
         }
 
         $saveFeedback = Feedback::create([
@@ -228,16 +280,28 @@ class NormalUserApiController extends Controller
         ]);
 
         if ($saveFeedback) {
-            return redirect()->back()->with('success', 'Feedback has been posted');
+            // return redirect()->back()->with('success', 'Feedback has been posted');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Feedback has been posted',
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Failed to post feedback');
+            // return redirect()->back()->with('error', 'Failed to post feedback');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to post feedback',
+            ], 400);
         }
     }
 
     public function postReport(Request $request, $categoryName, $companyName)
     {
         if (!$this->userData) {
-            return redirect()->back()->with('error', 'You must login as a normal user to report company');
+            // return redirect()->back()->with('error', 'You must login as a normal user to report company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'You must login as a normal user to report company',
+            ], 400);
         }
 
         $validate = Validator::make($request->all(), [
@@ -246,7 +310,11 @@ class NormalUserApiController extends Controller
 
         if ($validate->fails()) {
             if ($validate->errors()->has('report')) {
-                return redirect()->back()->with('error', 'Report is required');
+                // return redirect()->back()->with('error', 'Report is required');
+                return response()->json([
+                    'status'=>'error',
+                    'message' => 'Report is required',
+                ], 400);
             }
         }
 
@@ -261,7 +329,11 @@ class NormalUserApiController extends Controller
         ])->first();
 
         if ($checkReportHistory) {
-            return redirect()->back()->with('error', 'You have already reported this company');
+            // return redirect()->back()->with('error', 'You have already reported this company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'You have already reported this company',
+            ], 400);
         }
 
         $saveReport = Report::create([
@@ -271,16 +343,28 @@ class NormalUserApiController extends Controller
         ]);
 
         if ($saveReport) {
-            return redirect()->back()->with('success', 'Company has been reported');
+            // return redirect()->back()->with('success', 'Company has been reported');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Company has been reported',
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Failed to report company');
+            // return redirect()->back()->with('error', 'Failed to report company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to reported company',
+            ], 400);
         }
     }
 
     public function postRate(Request $request, $categoryName, $companyName)
     {
         if (!$this->userData) {
-            return redirect()->back()->with('error', 'You must login as a normal user to rate company');
+            // return redirect()->back()->with('error', 'You must login as a normal user to rate company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'You must login as a normal user to rate company',
+            ], 400);
         }
 
         $validate = Validator::make($request->all(), [
@@ -293,7 +377,11 @@ class NormalUserApiController extends Controller
 
         if ($validate->fails()) {
             if ($validate->errors()->has('rate_number')) {
-                return redirect()->back()->with('error', 'Rate is required');
+                // return redirect()->back()->with('error', 'Rate is required');
+                return response()->json([
+                    'status'=>'error',
+                    'message' => 'Rate is required',
+                ], 400);
             }
         }
 
@@ -313,9 +401,17 @@ class NormalUserApiController extends Controller
                     ]);
 
             if ($updateRating) {
-                return redirect()->back()->with('success', 'Company rate has been updated to ' . $rate_number . ' stars');
+                // return redirect()->back()->with('success', 'Company rate has been updated to ' . $rate_number . ' stars');
+                return response()->json([
+                    'status'=>'success',
+                    'message' => 'Company rate has been updated to ' . $rate_number . ' stars',
+                ], 200);
             } else {
-                return redirect()->back()->with('error', 'Failed to rate company');
+                // return redirect()->back()->with('error', 'Failed to rate company');
+                return response()->json([
+                    'status'=>'error',
+                    'message' => 'Failed to rate company',
+                ], 400);
             }
         }
 
@@ -326,9 +422,17 @@ class NormalUserApiController extends Controller
         ]);
 
         if ($saveRate) {
-            return redirect()->back()->with('success', 'Company has been rated');
+            // return redirect()->back()->with('success', 'Company has been rated');
+            return response()->json([
+                'status'=>'success',
+                'message' => 'Company has been rated',
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Failed to rate company');
+            // return redirect()->back()->with('error', 'Failed to rate company');
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to rate company',
+            ], 400);
         }
     }
 }

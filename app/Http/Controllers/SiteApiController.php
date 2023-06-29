@@ -27,7 +27,10 @@ class SiteApiController extends Controller
 
         // return response()->json($categories);
 
-        return view('categoryshow', ['categories' => $categories]);
+        // return view('categoryshow', ['categories' => $categories]);
+        return response()->json([
+            'categories' => $categories,
+        ],200);
 
     }
 
@@ -37,10 +40,14 @@ class SiteApiController extends Controller
         $category_id = Category::where('name', $categoryName)->get();
 
         if (count($category_id) == 0) {
-            return view('category-show-company', [
+            // return view('category-show-company', [
+            //     'cateNotFound' => true,
+            //     'categoryName' => $categoryName,
+            // ]);
+            return response()->json([
                 'cateNotFound' => true,
-                'categoryName' => $categoryName,
-            ]);
+                'categoryName' => $categoryName
+        ],200);
         } else {
             $category_id = $category_id[0]->category_id;
         }
@@ -51,11 +58,16 @@ class SiteApiController extends Controller
 
         // return response()->json($companies);
 
-        return view('category-show-company', [
+        // return view('category-show-company', [
+        //     'cateNotFound' => false,
+        //     'companies' => $companies,
+        //     'categoryName' => $categoryName,
+        // ]);
+        return response()->json([
             'cateNotFound' => false,
             'companies' => $companies,
-            'categoryName' => $categoryName,
-        ]);
+            'categoryName' => $categoryName
+        ],200);
     }
 
     public function companyDetail($categoryName, $companyName)
@@ -68,11 +80,17 @@ class SiteApiController extends Controller
 
         // return response()->json($company);
 
-        return view('company-detail', [
+        // return view('company-detail', [
+        //     'company' => $company,
+        //     'categoryName' => $categoryName,
+        //     'companyName' => $companyName,
+        // ]);
+        return response()->json([
             'company' => $company,
             'categoryName' => $categoryName,
             'companyName' => $companyName,
-        ]);
+            'currentUserRateNumber' => $currentUserRateNumber ? $currentUserRateNumber->star_number : null
+        ],200);
     }
 
     public function search(Request $request)
@@ -93,10 +111,15 @@ class SiteApiController extends Controller
 
         // return response()->json($result);
 
-        return view('search-results', [
+        // return view('search-results', [
+        //     'search_query' => $search_query,
+        //     'search_by' => $search_by,
+        //     'result' => $result,
+        // ]);
+        return response()->json([
             'search_query' => $search_query,
             'search_by' => $search_by,
-            'result' => $result,
-        ]);
+            'result' => $result
+        ],200);
     }
 }
