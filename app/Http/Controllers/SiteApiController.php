@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Validator;
 
 class SiteApiController extends Controller
 {
-    public function home()
-    {
-        return view('homepage');
-    }
+    // public function home()
+    // {
+    //     return view('homepage');
+    // }
 
     public function categories()
     {

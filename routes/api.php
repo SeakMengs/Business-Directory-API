@@ -20,7 +20,7 @@ use App\Http\Controllers\SiteApiController;
 
 Route::controller(SiteApiController::class)->group(function () {
 
-    Route::get('/', 'home')->name('home');
+    // Route::get('/', 'home')->name('home');
 
     Route::get('/category', 'categories')->name('category');
 

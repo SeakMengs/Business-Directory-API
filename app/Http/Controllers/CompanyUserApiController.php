@@ -297,7 +297,10 @@ class CompanyUserApiController extends Controller
             $userId = $this->userData->company_user_id;
         } else {
             // redirect to login page if the user is not logged in
-            return redirect()->route('login.company');
+            // return redirect()->route('login.company');
+           return response()->json([
+                'message' => 'User must log in' 
+            ], 401);
         }
 
         // https://stackoverflow.com/questions/17861412/calling-other-function-in-the-same-controller
