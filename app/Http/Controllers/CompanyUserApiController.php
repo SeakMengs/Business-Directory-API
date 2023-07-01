@@ -129,10 +129,11 @@ class CompanyUserApiController extends Controller
 
             if ($validatePassword->fails()) {
                 // return redirect()->back()->withErrors($validatePassword)->withInput($request->all());
+                // return response()->withErrors($validatePassword)->withInput($request->all());
                 return response()->json([
-                    'message' => 'The given data was invalid.',
-                    'errors' => $validatePassword->errors(),
-                ]);
+                    'status'=>'error',
+                    'message' => $validatePassword->errors(),
+                ], 400);
             }
         }
 
@@ -295,7 +296,11 @@ class CompanyUserApiController extends Controller
 
         if ($validator->fails()) {
             // redirect back to the same page with errors and old inputs
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
+            // return redirect()->back()->withErrors($validator)->withInput($request->all());
+            return response()->json([
+                'status'=>'error',
+                'message' => $validator->errors(),
+            ], 400);
         }
 
         // Check auth again to make sure the user is logged in
@@ -507,7 +512,11 @@ class CompanyUserApiController extends Controller
 
         if ($validator->fails()) {
             // redirect back to the same page with errors and old inputs
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
+            // return redirect()->back()->withErrors($validator)->withInput($request->all());
+            return response()->json([
+                'status'=>'error',
+                'message' => $validator->errors(),
+            ], 400);
         }
 
         // dd($storeUpdateCompany);
