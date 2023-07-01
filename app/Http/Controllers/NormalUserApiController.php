@@ -111,7 +111,11 @@ class NormalUserApiController extends Controller
             );
 
             if ($validatePassword->fails()) {
-                return redirect()->back()->withErrors($validatePassword)->withInput($request->all());
+                // return redirect()->back()->withErrors($validatePassword)->withInput($request->all());
+                return response()->json([
+                    'status'=>'error',
+                    'message' => $validatePassword->errors(),
+                ], 400);
             }
         }
 
@@ -135,7 +139,11 @@ class NormalUserApiController extends Controller
         );
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
+            // return redirect()->back()->withErrors($validator)->withInput($request->all());
+            return response()->json([
+                'status'=>'error',
+                'message' => $validator->errors(),
+            ], 400);
         }
 
         $saveChange = normalUser::where('normal_user_id', $userId)->update($storeInput);

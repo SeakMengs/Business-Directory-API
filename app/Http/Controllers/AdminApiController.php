@@ -63,9 +63,9 @@ class AdminApiController extends Controller
         // for debug purpose
         // return response()->json($request, 200);
 
-        $sortOrderBy = $request->query('sortOrderBy');
-        $searchBy = $request->query('searchBy');
-        $query = $request->query('query');
+        $sortOrderBy = $request->query('sortOrderBy') ?? 'desc';
+        $searchBy = $request->query('searchBy') ?? 'name';
+        $query = $request->query('query') ?? '';
         $banByAdminId = $request->query('banByAdminId') ?? null;
 
         if ($this->userData) {
@@ -93,9 +93,9 @@ class AdminApiController extends Controller
         // for debug purpose
         // return response()->json($request, 200);
 
-        $sortOrderBy = $request->query('sortOrderBy');
-        $searchBy = $request->query('searchBy');
-        $query = $request->query('query');
+        $sortOrderBy = $request->query('sortOrderBy') ?? 'desc';
+        $searchBy = $request->query('searchBy') ?? 'name';
+        $query = $request->query('query') ?? '';
         $banByAdminId = $request->query('banByAdminId') ?? null;
 
         if ($this->userData) {
@@ -124,10 +124,10 @@ class AdminApiController extends Controller
         // for debug purpose
         // return response()->json($request, 200);
 
-        $sortOrderBy = $request->query('sortOrderBy');
-        $sortBy = $request->query('sortBy');
-        $searchBy = $request->query('searchBy');
-        $query = $request->query('query');
+        $sortOrderBy = $request->query('sortOrderBy') ?? 'desc';
+        $sortBy = $request->query('sortBy') ?? 'created_at';
+        $searchBy = $request->query('searchBy') ?? 'name';
+        $query = $request->query('query') ?? '';
         $banByAdminId = $request->query('banByAdminId') ?? null;
 
         if ($this->userData) {
@@ -314,9 +314,9 @@ class AdminApiController extends Controller
 
     public function getCategory(Request $request)
     {
-        $sortOrderBy = $request->query('sortOrderBy');
-        $searchBy = $request->query('searchBy');
-        $query = $request->query('query');
+        $sortOrderBy = $request->query('sortOrderBy') ?? 'desc';
+        $searchBy = $request->query('searchBy') ?? 'name';
+        $query = $request->query('query') ?? '';
         $add_by_admin_id = $request->query('add_by_admin_id') ?? null;
 
         if ($this->userData) {
@@ -493,9 +493,9 @@ class AdminApiController extends Controller
 
     public function getAdmins(Request $request)
     {
-        $sortOrderBy = $request->query('sortOrderBy');
-        $searchBy = $request->query('searchBy');
-        $query = $request->query('query');
+        $sortOrderBy = $request->query('sortOrderBy') ?? 'desc';
+        $searchBy = $request->query('searchBy') ?? 'name';
+        $query = $request->query('query') ?? '';
 
         if ($this->userData) {
             $admins = AdminUser::where($searchBy, 'like', '%' . $query . '%')->orderBy('created_at', $sortOrderBy)->get();

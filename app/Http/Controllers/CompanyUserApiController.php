@@ -91,7 +91,6 @@ class CompanyUserApiController extends Controller
 
     public function saveEditProfile(Request $request, $username, $userId)
     {
-
         // store the first two input field because by default we place value in the input field
         $storeInput = [
             'name' => $request->input('name'),
@@ -129,7 +128,11 @@ class CompanyUserApiController extends Controller
             );
 
             if ($validatePassword->fails()) {
-                return redirect()->back()->withErrors($validatePassword)->withInput($request->all());
+                // return redirect()->back()->withErrors($validatePassword)->withInput($request->all());
+                return response()->json([
+                    'message' => 'The given data was invalid.',
+                    'errors' => $validatePassword->errors(),
+                ]);
             }
         }
 
@@ -153,7 +156,11 @@ class CompanyUserApiController extends Controller
         );
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
+            // return redirect()->back()->withErrors($validator)->withInput($request->all());
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors(),
+            ]);
         }
 
         $saveChange = CompanyUser::where('company_user_id', $userId)->update($storeInput);
@@ -299,7 +306,7 @@ class CompanyUserApiController extends Controller
             // redirect to login page if the user is not logged in
             // return redirect()->route('login.company');
            return response()->json([
-                'message' => 'User must log in' 
+                'message' => 'User must log in'
             ], 401);
         }
 
