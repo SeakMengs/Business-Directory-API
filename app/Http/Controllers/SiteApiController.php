@@ -89,7 +89,7 @@ class SiteApiController extends Controller
             'company' => $company,
             'categoryName' => $categoryName,
             'companyName' => $companyName,
-            'currentUserRateNumber' => $currentUserRateNumber ? $currentUserRateNumber->star_number : null
+            // 'currentUserRateNumber' => $currentUserRateNumber ? $currentUserRateNumber->star_number : null
         ],200);
     }
 
