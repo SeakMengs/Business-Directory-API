@@ -31,17 +31,6 @@ Route::controller(SiteApiController::class)->group(function () {
 
     route::get('/search', 'search')->name('search');
 
-});
-// Group route by RegisterController
-Route::controller(RegisterApiController::class)->group(function() {
-
-    // Route::get('/sign-up', 'signUpOption')->name('sign-up');
-
-    // Route::get('sign-up/company', 'companyUserSignUpView')->name('sign-up.company');
-
-    // Route::get('sign-up/user', 'normalUserSignUpView')->name('sign-up.user');
-
-    // Route for saving user to database
     Route::post('/register/company', 'companyUserRegister')->name('register.company');
 
     Route::post('/register/user', 'normalUserRegister')->name('register.user');

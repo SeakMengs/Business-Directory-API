@@ -122,4 +122,94 @@ class SiteApiController extends Controller
             'result' => $result
         ],200);
     }
+    public function normalUserRegister(Request $request)
+    {
+
+        // Validate the form data. First parameter is the request object, second parameter is the validation rules
+        // https://stackoverflow.com/questions/45007905/custom-laravel-validation-messages
+        $validate = $request->validate(
+            [
+                'name' => ['required', 'unique:normal_user'],
+                'email' => ['required', 'unique:normal_user'],
+                'password' => ['required', 'confirmed', 'min:8'],
+                'password_confirmation' => ['required', 'min:8', 'same:password'],
+            ],
+            [
+                'name.required' => 'Username is required',
+                'name.unique' => 'Username already exists',
+                'password.required' => 'Password is required',
+                'password.confirmed' => 'Password does not match',
+                'password.min' => 'Password must be at least 8 characters',
+                'password_confirmation.required' => 'Password confirmation is required',
+                'password_confirmation.min' => 'Password confirmation must be at least 8 characters',
+                'password_confirmation.same' => 'Password confirmation does not match',
+                'email.required' => 'Email is required',
+                'email.unique' => 'Email already exists',
+                'email.email' => 'Email is not valid',
+            ]
+        );
+
+        $saveUser = NormalUser::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ]);
+
+        if ($saveUser) {
+            return response()->json([
+                'status'=>'success',
+                'message' => 'User created successfully',
+            ], 200);
+        } else {
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to create user',
+            ], 400);
+        }
+    }
+
+    public function companyUserRegister(Request $request)
+    {
+        // Validate the form data. First parameter is the request object, second parameter is the validation rules
+        // https://stackoverflow.com/questions/45007905/custom-laravel-validation-messages
+        $validate = $request->validate(
+            [
+                'name' => ['required', 'unique:company_user'],
+                'email' => ['required', 'unique:company_user'],
+                'password' => ['required', 'confirmed', 'min:8'],
+                'password_confirmation' => ['required', 'min:8', 'same:password'],
+            ],
+            [
+                'name.required' => 'Username is required',
+                'name.unique' => 'Username already exists',
+                'password.required' => 'Password is required',
+                'password.confirmed' => 'Password does not match',
+                'password.min' => 'Password must be at least 8 characters',
+                'password_confirmation.required' => 'Password confirmation is required',
+                'password_confirmation.min' => 'Password confirmation must be at least 8 characters',
+                'password_confirmation.same' => 'Password confirmation does not match',
+                'email.required' => 'Email is required',
+                'email.unique' => 'Email already exists',
+                'email.email' => 'Email is not valid',
+            ]
+        );
+
+        $saveUser = CompanyUser::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ]);
+
+        if ($saveUser) {
+            return response()->json([
+                'status'=>'success',
+                'message' => 'User created successfully',
+            ], 200);
+        } else {
+            return response()->json([
+                'status'=>'error',
+                'message' => 'Failed to create user',
+            ], 400);
+        }
+    }
 }
