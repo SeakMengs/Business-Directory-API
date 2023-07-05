@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Company;
 use App\Models\Category;
 use App\Models\CompanyUser;
+use App\Models\NormalUser;
 use App\Models\Feedback;
 use App\Models\Rate;
 use App\Models\Report;
@@ -12,6 +14,7 @@ use App\Models\SavedCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+
 
 class SiteApiController extends Controller
 {
@@ -127,7 +130,8 @@ class SiteApiController extends Controller
 
         // Validate the form data. First parameter is the request object, second parameter is the validation rules
         // https://stackoverflow.com/questions/45007905/custom-laravel-validation-messages
-        $validate = $request->validate(
+       $validate= Validator::make(
+            $request->all(),
             [
                 'name' => ['required', 'unique:normal_user'],
                 'email' => ['required', 'unique:normal_user'],
@@ -149,6 +153,12 @@ class SiteApiController extends Controller
             ]
         );
 
+        if($validate->fails()){
+            return response()->json([
+                'status'=>'error',
+                'message'=>$validate->errors(),
+            ], 400);
+         }
         $saveUser = NormalUser::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -172,7 +182,8 @@ class SiteApiController extends Controller
     {
         // Validate the form data. First parameter is the request object, second parameter is the validation rules
         // https://stackoverflow.com/questions/45007905/custom-laravel-validation-messages
-        $validate = $request->validate(
+        $validate= Validator::make(
+            $request->all(),
             [
                 'name' => ['required', 'unique:company_user'],
                 'email' => ['required', 'unique:company_user'],
@@ -194,6 +205,12 @@ class SiteApiController extends Controller
             ]
         );
 
+        if($validate->fails()){
+            return response()->json([
+                'status'=>'error',
+                'message'=>$validate->errors(),
+            ], 400);
+         }
         $saveUser = CompanyUser::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -203,12 +220,12 @@ class SiteApiController extends Controller
         if ($saveUser) {
             return response()->json([
                 'status'=>'success',
-                'message' => 'User created successfully',
+                'message' => 'Company created successfully',
             ], 200);
         } else {
             return response()->json([
                 'status'=>'error',
-                'message' => 'Failed to create user',
+                'message' => 'Failed to create company',
             ], 400);
         }
     }
