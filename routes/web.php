@@ -16,5 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return response()->json([
         'message' => 'Welcome to business directory API',
+        'Server name' => gethostname(),
+        'Server Ip' => $_SERVER['SERVER_ADDR'] ?? "Localhost",
     ]);
 });
