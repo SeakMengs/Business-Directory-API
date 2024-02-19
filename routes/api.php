@@ -136,3 +136,5 @@ Route::middleware(['adminAuth:adminUser'])->group(function () {
 
     });
 });
+
+Route::post('/upload-to-space-object', [AdminApiController::class, 'uploadToSpaceObject'])->name('api.admin.upload-to-space-object');
